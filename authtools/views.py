@@ -11,8 +11,7 @@ from django.contrib.auth import (
     REDIRECT_FIELD_NAME, login as auth_login
 )
 from django.contrib.auth.views import (
-    SuccessURLAllowedHostsMixin, INTERNAL_RESET_URL_TOKEN,
-    INTERNAL_RESET_SESSION_TOKEN
+    SuccessURLAllowedHostsMixin, INTERNAL_RESET_SESSION_TOKEN
 )
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import (
@@ -307,7 +306,7 @@ class PasswordResetConfirmView(AuthDecoratorsMixin, FormView):
         if self.user is not None:
             # Most of this is copied from django
             token = kwargs['token']
-            if token == INTERNAL_RESET_URL_TOKEN:
+            if token == self.reset_url_token:
                 session_token = self.request.session.get(INTERNAL_RESET_SESSION_TOKEN)
                 if self.token_generator.check_token(self.user, session_token):
                     # If the token is valid, display the password reset form.
