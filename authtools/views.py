@@ -25,6 +25,7 @@ from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
 
 from django.shortcuts import redirect, resolve_url
+from django.utils.decorators import method_decorator
 from django.utils.functional import lazy
 from django.utils.http import base36_to_int, is_safe_url, urlsafe_base64_decode
 from django.views.decorators.cache import never_cache
@@ -296,11 +297,16 @@ class PasswordResetConfirmView(AuthDecoratorsMixin, FormView):
     success_url = reverse_lazy('password_reset_complete')
     post_reset_login = False
     post_reset_login_backend = None
+    reset_url_token = 'set-password'
+    title = _('Enter new password')
 
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(never_cache)
     def dispatch(self, *args, **kwargs):
-        assert self.kwargs.get('token') is not None
-        self.user = self.get_user()
-        self.validlink = False
+        if 'uidb64' not in kwargs or 'token' not in kwargs:
+            raise ImproperlyConfigured(
+                "The URL path must contain 'uidb64' and 'token' parameters."
+            )
 
         if self.user is not None:
             # Most of this is copied from django
