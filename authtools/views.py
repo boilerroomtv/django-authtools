@@ -25,7 +25,7 @@ from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
 
 from django.shortcuts import redirect, resolve_url
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy
 from django.utils.decorators import method_decorator
 from django.utils.functional import lazy
 from django.utils.http import base36_to_int, is_safe_url, urlsafe_base64_decode
@@ -299,7 +299,7 @@ class PasswordResetConfirmView(AuthDecoratorsMixin, FormView):
     post_reset_login = False
     post_reset_login_backend = None
     reset_url_token = 'set-password'
-    title = _('Enter new password')
+    title = gettext_lazy('Enter new password')
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)
