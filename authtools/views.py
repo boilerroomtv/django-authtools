@@ -309,6 +309,9 @@ class PasswordResetConfirmView(AuthDecoratorsMixin, FormView):
                 "The URL path must contain 'uidb64' and 'token' parameters."
             )
 
+        self.validlink = False
+        self.user = self.get_user(kwargs['uidb64'])
+
         if self.user is not None:
             # Most of this is copied from django
             token = kwargs['token']
