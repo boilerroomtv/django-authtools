@@ -11,7 +11,7 @@ from django.contrib.auth import (
     REDIRECT_FIELD_NAME, login as auth_login
 )
 from django.contrib.auth.views import (
-    SuccessURLAllowedHostsMixin, INTERNAL_RESET_SESSION_TOKEN
+    RedirectURLMixin, INTERNAL_RESET_SESSION_TOKEN
 )
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import (
@@ -148,7 +148,7 @@ class AuthDecoratorsMixin(NeverCacheMixin, CsrfProtectMixin, SensitivePostParame
     pass
 
 
-class LoginView(AuthDecoratorsMixin, SuccessURLAllowedHostsMixin,
+class LoginView(AuthDecoratorsMixin, RedirectURLMixin,
                 WithCurrentSiteMixin, WithNextUrlMixin, FormView):
     form_class = AuthenticationForm
     authentication_form = None
@@ -195,7 +195,7 @@ class LoginView(AuthDecoratorsMixin, SuccessURLAllowedHostsMixin,
         return kwargs
 
 
-class LogoutView(NeverCacheMixin, SuccessURLAllowedHostsMixin, WithCurrentSiteMixin, WithNextUrlMixin, TemplateView,
+class LogoutView(NeverCacheMixin, RedirectURLMixin, WithCurrentSiteMixin, WithNextUrlMixin, TemplateView,
                  RedirectView):
     template_name = 'registration/logged_out.html'
     permanent = False
