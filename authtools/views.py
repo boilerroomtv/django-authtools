@@ -28,7 +28,7 @@ from django.shortcuts import redirect, resolve_url
 from django.utils.translation import gettext_lazy
 from django.utils.decorators import method_decorator
 from django.utils.functional import lazy
-from django.utils.http import base36_to_int, is_safe_url, urlsafe_base64_decode
+from django.utils.http import base36_to_int, url_has_allowed_host_and_scheme, urlsafe_base64_decode
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
@@ -87,7 +87,7 @@ class WithNextUrlMixin(object):
         except AttributeError:
             pass
 
-        url_is_safe = is_safe_url(
+        url_is_safe = url_has_allowed_host_and_scheme(
             redirect_to,
             allowed_hosts=allowed_hosts,
             require_https=self.request.is_secure()
